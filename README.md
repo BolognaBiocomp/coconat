@@ -46,8 +46,9 @@ git clone https://huggingface.co/Rostlab/prot_t5_xl_uniref50
 
 ## Run CoCoNat
 
-To run the program use the run_coconat_docker.py script, providing a FASTA file
-an output file, and the path were ESM and ProtT5 pLMs are stored, as follows:
+To run the program use the run_coconat_docker.py script inside the CoCoNat root
+directory, providing a FASTA file an output file, and the path where ESM and
+ProtT5 pLMs are stored, as follows:
 
 ```
 cd coconat
