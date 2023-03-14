@@ -36,8 +36,8 @@ def main():
     for i in range(len(sequences)):
         samples.append(np.hstack((prot_t5_embeddings[i], esm1b_embeddings[i])))
     samples = keras.utils.pad_sequences(samples, padding="post", dtype="float32")
-    register_file = predict_register_probability(samples, lengths, work_env)
-    labels, probs = crf_refine(register_file, work_env)
+    register_file = utils.predict_register_probability(samples, lengths, work_env)
+    labels, probs = utils.crf_refine(register_file, work_env)
     with open(args.outfile, 'w') as outf:
         for i in range(len(sequences)):
             for j in range(lengths[i]):
