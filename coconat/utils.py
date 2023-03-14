@@ -4,6 +4,9 @@ import numpy as np
 
 from . import coconatconfig as cfg
 
+
+
+
 def predict_register_probability(matrix, lengths, work_env):
     model = keras.models.load_model(cfg.COCONAT_REGISTER_MODEL)
     register_out_file = work_env.createFile("registers.", ".tsv")

@@ -7,3 +7,7 @@ COCONAT_REGISTER_MODEL = "%s/models/dlModel" % COCONAT_ROOT
 COCONAT_CRF_MODEL = "%s/models/crfModel" % COCONAT_ROOT
 
 CRF_BIN = "%s/tools/biocrf-static" % COCONAT_ROOT
+
+PROT_T5_MODEL = "%s/prot_t5_xl_uniref50"
+
+ESM_MODEL = "%s/esm/esm1b_t33_650M_UR50S.pt"
