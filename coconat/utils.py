@@ -46,12 +46,10 @@ def embed_esm(sequences, seq_ids):
         ret.append(token_representations[i, 1 : tokens_len - 1].detach().cpu().numpy())
     return ret
 
-
-
-def predict_register_probability(matrix, lengths, work_env):
+def predict_register_probability(samples, lengths, work_env):
     model = keras.models.load_model(cfg.COCONAT_REGISTER_MODEL)
     register_out_file = work_env.createFile("registers.", ".tsv")
-    pred = model.predict(matrix)
+    pred = model.predict(samples)
     with open(register_out_file, 'w') as rof:
         for i in range(pred.shape[0]):
             for j in range(lengths[i]):
