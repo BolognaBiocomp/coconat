@@ -34,7 +34,7 @@ def embed_esm(sequences, seq_ids):
     model.to(device)
     model.eval()
     batch_converter = alphabet.get_batch_converter()
-    data = zip(seq_ids, sequences)
+    data = list(zip(seq_ids, sequences))
     batch_labels, batch_strs, batch_tokens = batch_converter(data)
     batch_lens = (batch_tokens != alphabet.padding_idx).sum(1)
     batch_tokens.to(device)
