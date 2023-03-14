@@ -1,4 +1,5 @@
 #!/usr/local/bin/python -W ignore
+import os
 import argparse
 import sys
 import numpy as np
