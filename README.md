@@ -8,6 +8,7 @@ Create a conda environment with Python 3:
 
 ```
 conda create -n coconat python
+conda activate coconat
 ```
 
 Install dependencies using pip:
