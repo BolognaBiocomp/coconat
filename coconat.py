@@ -26,7 +26,7 @@ def main():
     esm1b_embeddings = utils.embed_esm(sequences, seq_ids)
     for m in prot_t5_embeddings:
         print(m.shape)
-    fro m in esm1b_embeddings:
+    for m in esm1b_embeddings:
         print(m.shape)
 
 
