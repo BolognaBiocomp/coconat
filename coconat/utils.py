@@ -6,7 +6,6 @@ import torch
 import esm
 from transformers import T5EncoderModel, T5Tokenizer
 from transformers.utils import logging
-tf.autograph.set_verbosity(0)
 logging.set_verbosity(50)
 
 import subprocess
