@@ -1,12 +1,12 @@
 import re
-import keras
+import tensorflow as tf
 import h5py
 import numpy as np
 import torch
 import esm
 from transformers import T5EncoderModel, T5Tokenizer
 from transformers.utils import logging
-
+tf.autograph.set_verbosity(0)
 logging.set_verbosity(50)
 
 import subprocess
@@ -52,7 +52,7 @@ def embed_esm(sequences, seq_ids):
     return ret
 
 def predict_register_probability(samples, lengths, work_env):
-    model = keras.models.load_model(cfg.COCONAT_REGISTER_MODEL)
+    model = tf.keras.models.load_model(cfg.COCONAT_REGISTER_MODEL)
     register_out_file = work_env.createFile("registers.", ".tsv")
     pred = model.predict(samples)
     with open(register_out_file, 'w') as rof:
