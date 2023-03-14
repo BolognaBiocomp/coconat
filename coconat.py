@@ -39,10 +39,12 @@ def main():
     register_file = utils.predict_register_probability(samples, lengths, work_env)
     labels, probs = utils.crf_refine(register_file, work_env)
     with open(args.outfile, 'w') as outf:
+        print("ID", "RES", "CC_CLASS", "Pi", "Pa", "Pb", "Pc", "Pd", "Pe", "Pf", "Pg", "PH", sep="\t", file=outf)
         for i in range(len(sequences)):
             for j in range(lengths[i]):
-                print(seq_ids[i], sequences[i][j], labels[i][j], *list(probs[i][j]), sep="\t", file=outf)
+                print(seq_ids[i], sequences[i][j], labels[i][j], *[round(x,2) for x in list(probs[i][j])], sep="\t", file=outf)
         outf.close()
+    work_env.destroy()
     return 0
 
 if __name__ == "__main__":
