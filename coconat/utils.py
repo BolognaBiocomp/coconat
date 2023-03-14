@@ -3,6 +3,7 @@ import keras
 import h5py
 import numpy as np
 import torch
+import esm
 from transformers import T5EncoderModel, T5Tokenizer
 
 from . import coconatconfig as cfg
@@ -27,8 +28,25 @@ def embed_prot_t5(sequences):
         ret.append(emb.detach().cpu().numpy())
     return ret
 
-def embed_esm(sequences):
-    pass
+def embed_esm(sequences, seq_ids):
+    device = torch.device(cfg.DEVICE)
+    model, alphabet = esm.pretrained.load_model_and_alphabet(cfg.ESM_MODEL)
+    model.to(device)
+    model.eval()
+    batch_converter = alphabet.get_batch_converter()
+    data = zip(seq_ids, sequences)
+    batch_labels, batch_strs, batch_tokens = batch_converter(data)
+    batch_lens = (batch_tokens != alphabet.padding_idx).sum(1)
+    batch_tokens.to(device)
+    with torch.no_grad():
+        results = model(batch_tokens, repr_layers=[33], return_contacts=False)
+    token_representations = results["representations"][33]
+    ret = []
+    for i, tokens_len in enumerate(batch_lens):
+        ret.append(token_representations[i, 1 : tokens_len - 1].detach().cpu().numpy())
+    return ret
+
+
 
 def predict_register_probability(matrix, lengths, work_env):
     model = keras.models.load_model(cfg.COCONAT_REGISTER_MODEL)

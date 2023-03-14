@@ -23,7 +23,10 @@ def main():
         sequences.append(str(record.seq))
 
     prot_t5_embeddings = utils.embed_prot_t5(sequences)
+    esm1b_embeddings = utils.embed_esm(sequences, seq_ids)
     for m in prot_t5_embeddings:
+        print(m.shape)
+    fro m in esm1b_embeddings:
         print(m.shape)
 
 
