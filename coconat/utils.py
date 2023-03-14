@@ -23,7 +23,7 @@ def embed_prot_t5(sequences):
     lengths = [len(sequence) for sequence in sequences]
     ret = []
     for i in range(len(sequences)):
-        emb = embedding_repr[i,:lengths[i]]
+        emb = embedding_repr.last_hidden_state[i,:lengths[i]]
         ret.append(emb.detach().cpu().numpy())
     return ret
 
