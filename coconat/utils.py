@@ -6,6 +6,8 @@ import torch
 import esm
 from transformers import T5EncoderModel, T5Tokenizer
 
+import subprocess
+
 from . import coconatconfig as cfg
 
 def embed_prot_t5(sequences):
