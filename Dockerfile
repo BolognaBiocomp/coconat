@@ -11,4 +11,4 @@ RUN python -m pip install --upgrade pip && \
 
 COPY . .
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/app/coconat/coconat.py"]
