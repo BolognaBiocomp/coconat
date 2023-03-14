@@ -1,3 +1,4 @@
+#!/usr/local/bin/python -W ignore
 import argparse
 import sys
 
