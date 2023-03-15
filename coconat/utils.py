@@ -5,9 +5,9 @@ import h5py
 import numpy as np
 import torch
 import esm
-
+from transformers import T5EncoderModel, T5Tokenizer
 from transformers.utils import logging
-logging.set_verbosity(50)
+#logging.set_verbosity(50)
 
 import subprocess
 
@@ -16,14 +16,13 @@ from . import coconatconfig as cfg
 def embed_prot_t5(sequences):
     #device = torch.device(cfg.DEVICE)
     print("Loading pretrained ProtT5 model...", file=sys.stderr)
-    from transformers import T5EncoderModel, T5Tokenizer
     model = T5EncoderModel.from_pretrained(cfg.PROT_T5_MODEL)
     tokenizer = T5Tokenizer.from_pretrained(cfg.PROT_T5_MODEL)
     print("Done.", file=sys.stderr)
     seqs = [" ".join(list(re.sub(r"[UZOB]", "X", sequence))) for sequence in sequences]
     ids = tokenizer.batch_encode_plus(seqs, add_special_tokens=True, padding="longest")
-    #input_ids = torch.tensor(ids['input_ids']).to(device)
-    #attention_mask = torch.tensor(ids['attention_mask']).to(device)
+    input_ids = torch.tensor(ids['input_ids']) #.to(device)
+    attention_mask = torch.tensor(ids['attention_mask']) #.to(device)
     with torch.no_grad():
         embedding_repr = model(input_ids=input_ids,attention_mask=attention_mask)
 
