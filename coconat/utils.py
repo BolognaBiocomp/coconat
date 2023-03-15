@@ -1,3 +1,4 @@
+import sys
 import re
 import tensorflow as tf
 import h5py
@@ -14,10 +15,10 @@ from . import coconatconfig as cfg
 
 def embed_prot_t5(sequences):
     #device = torch.device(cfg.DEVICE)
-    print("Loading pretrained ProtT5 model...")
+    print("Loading pretrained ProtT5 model...", file=sys.stderr)
     model = T5EncoderModel.from_pretrained(cfg.PROT_T5_MODEL)
     tokenizer = T5Tokenizer.from_pretrained(cfg.PROT_T5_MODEL)
-    print("Done.")
+    print("Done.", file=sys.stderr)
     seqs = [" ".join(list(re.sub(r"[UZOB]", "X", sequence))) for sequence in sequences]
     ids = tokenizer.batch_encode_plus(seqs, add_special_tokens=True, padding="longest")
     #input_ids = torch.tensor(ids['input_ids']).to(device)
@@ -34,10 +35,10 @@ def embed_prot_t5(sequences):
 
 def embed_esm(sequences, seq_ids):
     #device = torch.device(cfg.DEVICE)
-    print("Loading pretrained ESM1-b model...")
+    print("Loading pretrained ESM1-b model...", file=sys.stderr)
     model, alphabet = esm.pretrained.load_model_and_alphabet(cfg.ESM_MODEL)
     #model.to(device)
-    print("Done")
+    print("Done", file=sys.stderr)
     model.eval()
     batch_converter = alphabet.get_batch_converter()
     data = list(zip(seq_ids, sequences))
