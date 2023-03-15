@@ -13,15 +13,15 @@ import subprocess
 from . import coconatconfig as cfg
 
 def embed_prot_t5(sequences):
-    device = torch.device(cfg.DEVICE)
+    #device = torch.device(cfg.DEVICE)
 
     model = T5EncoderModel.from_pretrained(cfg.PROT_T5_MODEL)
     tokenizer = T5Tokenizer.from_pretrained(cfg.PROT_T5_MODEL)
 
     seqs = [" ".join(list(re.sub(r"[UZOB]", "X", sequence))) for sequence in sequences]
     ids = tokenizer.batch_encode_plus(seqs, add_special_tokens=True, padding="longest")
-    input_ids = torch.tensor(ids['input_ids']).to(device)
-    attention_mask = torch.tensor(ids['attention_mask']).to(device)
+    #input_ids = torch.tensor(ids['input_ids']).to(device)
+    #attention_mask = torch.tensor(ids['attention_mask']).to(device)
     with torch.no_grad():
         embedding_repr = model(input_ids=input_ids,attention_mask=attention_mask)
 
@@ -33,15 +33,15 @@ def embed_prot_t5(sequences):
     return ret
 
 def embed_esm(sequences, seq_ids):
-    device = torch.device(cfg.DEVICE)
+    #device = torch.device(cfg.DEVICE)
     model, alphabet = esm.pretrained.load_model_and_alphabet(cfg.ESM_MODEL)
-    model.to(device)
+    #model.to(device)
     model.eval()
     batch_converter = alphabet.get_batch_converter()
     data = list(zip(seq_ids, sequences))
     batch_labels, batch_strs, batch_tokens = batch_converter(data)
     batch_lens = (batch_tokens != alphabet.padding_idx).sum(1)
-    batch_tokens.to(device)
+    #batch_tokens.to(device)
     with torch.no_grad():
         results = model(batch_tokens, repr_layers=[33], return_contacts=False)
     token_representations = results["representations"][33]
