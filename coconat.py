@@ -61,7 +61,7 @@ def main():
         oligo_preds[s[0]] = (st, pr)
 
     with open(args.outfile, 'w') as outf:
-        print("ID", "RES", "CC_CLASS", "OligoState", "Pi", "Pa", "Pb", "Pc", "Pd", "Pe", "Pf", "Pg", "PH", sep="\t", file=outf)
+        print("ID", "RES", "CC_CLASS", "OligoState", "Pi", "Pa", "Pb", "Pc", "Pd", "Pe", "Pf", "Pg", "PH", "POligo", sep="\t", file=outf)
         for i in range(len(sequences)):
             for j in range(lengths[i]):
                 print(seq_ids[i], sequences[i][j], labels[i][j], oligo_preds[i][0][j], *[round(x,2) for x in list(probs[i][j])], oligo_preds[i][1][j], sep="\t", file=outf)
