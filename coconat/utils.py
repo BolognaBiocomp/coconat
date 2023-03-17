@@ -93,3 +93,14 @@ def crf_refine(register_file, work_env):
                 i = i + 1
         crfo.close()
     return labels, probs
+
+def predict_oligo_state(samples):
+    oligo_map = {0:"A",1:"P",2:"3",3:"4"}
+    model = tf.keras.models.load_model(cfg.COCONAT_OLIGO_MODEL)
+    pred = model.predict(samples)
+    probs = []
+    oligo_states = []
+    for i in range(pred.shape[0]):
+        oligo_states.append(oligo_map[np.argmax(pred[i,0])])
+        probs.append(np.max(pred[i,0]))
+    return oligo_states, probs

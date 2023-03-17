@@ -3,6 +3,7 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import argparse
 import sys
+import re
 import numpy as np
 import tensorflow as tf
 
@@ -39,11 +40,30 @@ def main():
     samples = tf.keras.utils.pad_sequences(samples, padding="post", dtype="float32")
     register_file = utils.predict_register_probability(samples, lengths, work_env)
     labels, probs = utils.crf_refine(register_file, work_env)
+    cc_segments = []
+    oligo_preds = {}
+    oligo_samples = []
+    for i in range(len(sequences)):
+        oligo_preds[i] = (["i"]*lengths[i], [0.0]*lengths[i])
+        if len(re.findall("[abcdefgH]+","".join(labels[i]))) > 0:
+            for m in re.finditer("[abcdefgH]+","".join(labels[i])):
+                cc_segments.append((i, m.start(), m.end()))
+                v = np.mean(samples[i,m.start():m.end(),:], axis=0)
+                oligo_samples.append(np.expand_dims(v, axis=0))
+
+    oligo_states, oligo_probs = utils.predict_oligo_state(oligo_samples, work_env)
+    for k, s in enumerate(cc_segments):
+        st, pr = oligo_preds[s[0]]
+        for j in range(s[1],s[2]):
+            st[j] = oligo_states[k]
+            pr[j] = oligo_probs[k]
+        oligo_preds[s[0]] = (st, pr)
+
     with open(args.outfile, 'w') as outf:
         print("ID", "RES", "CC_CLASS", "OligoState", "Pi", "Pa", "Pb", "Pc", "Pd", "Pe", "Pf", "Pg", "PH", sep="\t", file=outf)
         for i in range(len(sequences)):
             for j in range(lengths[i]):
-                print(seq_ids[i], sequences[i][j], labels[i][j], "P", *[round(x,2) for x in list(probs[i][j])], sep="\t", file=outf)
+                print(seq_ids[i], sequences[i][j], labels[i][j], oligo_preds[i][0][j], *[round(x,2) for x in list(probs[i][j])], oligo_preds[i][1][j], sep="\t", file=outf)
         outf.close()
     work_env.destroy()
     return 0
