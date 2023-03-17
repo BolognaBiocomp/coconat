@@ -50,6 +50,7 @@ def main():
                 cc_segments.append((i, m.start(), m.end()))
                 v = np.mean(samples[i,m.start():m.end(),:], axis=0)
                 oligo_samples.append(np.expand_dims(v, axis=0))
+    oligo_samples = np.array(oligo_samples)
 
     oligo_states, oligo_probs = utils.predict_oligo_state(oligo_samples)
     for k, s in enumerate(cc_segments):
