@@ -13,6 +13,34 @@ import subprocess
 
 from . import coconatconfig as cfg
 
+def chunk_sequence(recid, sequence):
+    if len(sequence) <= 1022:
+        return ["%s_0" % recid], [sequence]
+    else:
+        chunks, chunk_ids = [], []
+        l = int(np.ceil(len(sequence) / 2 ))
+        k, e = 2, 1
+        while l > 1022:
+            e = e + 1
+            k = int(2.0**e)
+            l = int(np.ceil(l / 2))
+        print(k, e, l)
+        for i in range(k):
+            print(i, i*l, (i+1)*l)
+            chunks.append(sequence[i*l:min((i+1)*l, len(sequence))])
+            chunk_ids.append("%s_%d" % (recid, i))
+        return chunks, chunk_ids
+
+def join_chunks(chunk_ids, embeddings):
+    prev = None
+    ret = []
+    for i, e in enumerate(embeddings):
+        if chunk_ids.split("_")[0] != prev:
+            ret.append(e)
+        else:
+            ret[-1] = np.vstack((ret[-1], e))
+    return ret
+
 def embed_prot_t5(sequences):
     #device = torch.device(cfg.DEVICE)
     print("Loading pretrained ProtT5 model...", file=sys.stderr)

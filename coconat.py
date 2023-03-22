@@ -27,13 +27,23 @@ def main():
     work_env = workenv.TemporaryEnv(os.path.dirname(args.outfile).strip())
 
     sequences, seq_ids, lengths = [], [], []
+    chunks, chunk_ids = [], []
     for record in SeqIO.parse(args.fasta, 'fasta'):
         seq_ids.append(record.id)
         sequences.append(str(record.seq))
         lengths.append(len(str(record.seq)))
+        r_chunks, r_chunk_ids = utils.chunk_sequence(str(record.seq))
+        chunks.extend(r_chunks)
+        chunk_ids.extend(r_chunk_ids)
 
-    prot_t5_embeddings = utils.embed_prot_t5(sequences)
-    esm1b_embeddings = utils.embed_esm(sequences, seq_ids)
+    prot_t5_embeddings = utils.embed_prot_t5(chunks)
+    esm1b_embeddings = utils.embed_esm(chunks, chunk_ids)
+
+    prot_t5_embeddings = utils.join_chunks(chunk_ids, prot_t5_embeddings)
+    esm1b_embeddings = utils.join_chunks(chunk_ids, esm1b_embeddings)
+
+    assert(sum([int(prot_t5_embeddings[i].shape[0] != lengths[i]) for i in range(len(sequences))]) == 0)
+    assert(sum([int(esm1b_embeddings[i].shape[0] != lengths[i]) for i in range(len(sequences))]) == 0)
     samples = []
     for i in range(len(sequences)):
         samples.append(np.hstack((prot_t5_embeddings[i], esm1b_embeddings[i])))
