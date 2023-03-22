@@ -46,13 +46,15 @@ def main():
     try:
         assert(sum([int(prot_t5_embeddings[i].shape[0] != lengths[i]) for i in range(len(sequences))]) == 0)
     except:
-        print([prot_t5_embeddings[i].shape[0] for i in range(len(sequences)])
+        print([prot_t5_embeddings[i].shape[0] for i in range(len(sequences))])
         print(lengths)
+        raise
     try:
         assert(sum([int(esm1b_embeddings[i].shape[0] != lengths[i]) for i in range(len(sequences))]) == 0)
     except:
-        print([esm1b_embeddings[i].shape[0] for i in range(len(sequences)])
+        print([esm1b_embeddings[i].shape[0] for i in range(len(sequences))])
         print(lengths)
+        raise
     samples = []
     for i in range(len(sequences)):
         samples.append(np.hstack((prot_t5_embeddings[i], esm1b_embeddings[i])))
