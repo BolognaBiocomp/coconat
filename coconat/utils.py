@@ -35,7 +35,7 @@ def join_chunks(chunk_ids, embeddings):
     prev = None
     ret = []
     for i, e in enumerate(embeddings):
-        if chunk_ids.split("_")[0] != prev:
+        if chunk_ids[i].split("_")[0] != prev:
             ret.append(e)
         else:
             ret[-1] = np.vstack((ret[-1], e))
