@@ -32,7 +32,7 @@ def main():
         seq_ids.append(record.id)
         sequences.append(str(record.seq))
         lengths.append(len(str(record.seq)))
-        r_chunks, r_chunk_ids = utils.chunk_sequence(str(record.seq))
+        r_chunks, r_chunk_ids = utils.chunk_sequence(record.id, str(record.seq))
         chunks.extend(r_chunks)
         chunk_ids.extend(r_chunk_ids)
 
