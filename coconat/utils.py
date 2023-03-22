@@ -39,6 +39,7 @@ def join_chunks(chunk_ids, embeddings):
             ret.append(e)
         else:
             ret[-1] = np.vstack((ret[-1], e))
+        prev = chunk_ids[i].split("_")[0]
     return ret
 
 def embed_prot_t5(sequences):
