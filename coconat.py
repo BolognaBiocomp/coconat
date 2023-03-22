@@ -37,7 +37,7 @@ def main():
         chunk_ids.extend(r_chunk_ids)
 
     print(chunks)
-    print(chunks_ids)
+    print(chunk_ids)
     prot_t5_embeddings = utils.embed_prot_t5(chunks)
     esm1b_embeddings = utils.embed_esm(chunks, chunk_ids)
 

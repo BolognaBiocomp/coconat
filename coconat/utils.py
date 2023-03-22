@@ -15,7 +15,7 @@ from . import coconatconfig as cfg
 
 def chunk_sequence(recid, sequence):
     if len(sequence) <= 1022:
-        return ["%s_0" % recid], [sequence]
+        return [sequence], ["%s_0" % recid]
     else:
         chunks, chunk_ids = [], []
         l = int(np.ceil(len(sequence) / 2 ))
