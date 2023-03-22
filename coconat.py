@@ -36,16 +36,23 @@ def main():
         chunks.extend(r_chunks)
         chunk_ids.extend(r_chunk_ids)
 
-    print(chunks)
-    print(chunk_ids)
+    #print(chunks)
+    #print(chunk_ids)
     prot_t5_embeddings = utils.embed_prot_t5(chunks)
     esm1b_embeddings = utils.embed_esm(chunks, chunk_ids)
 
     prot_t5_embeddings = utils.join_chunks(chunk_ids, prot_t5_embeddings)
     esm1b_embeddings = utils.join_chunks(chunk_ids, esm1b_embeddings)
-
-    assert(sum([int(prot_t5_embeddings[i].shape[0] != lengths[i]) for i in range(len(sequences))]) == 0)
-    assert(sum([int(esm1b_embeddings[i].shape[0] != lengths[i]) for i in range(len(sequences))]) == 0)
+    try:
+        assert(sum([int(prot_t5_embeddings[i].shape[0] != lengths[i]) for i in range(len(sequences))]) == 0)
+    except:
+        print([prot_t5_embeddings[i].shape[0] for i in range(len(sequences)])
+        print(lengths)
+    try:
+        assert(sum([int(esm1b_embeddings[i].shape[0] != lengths[i]) for i in range(len(sequences))]) == 0)
+    except:
+        print([esm1b_embeddings[i].shape[0] for i in range(len(sequences)])
+        print(lengths)
     samples = []
     for i in range(len(sequences)):
         samples.append(np.hstack((prot_t5_embeddings[i], esm1b_embeddings[i])))

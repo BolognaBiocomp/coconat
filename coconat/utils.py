@@ -24,9 +24,9 @@ def chunk_sequence(recid, sequence):
             e = e + 1
             k = int(2.0**e)
             l = int(np.ceil(l / 2))
-        print(k, e, l)
+        #print(k, e, l)
         for i in range(k):
-            print(i, i*l, (i+1)*l)
+            #print(i, i*l, (i+1)*l)
             chunks.append(sequence[i*l:min((i+1)*l, len(sequence))])
             chunk_ids.append("%s_%d" % (recid, i))
         return chunks, chunk_ids
