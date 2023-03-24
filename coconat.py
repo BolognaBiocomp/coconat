@@ -48,7 +48,7 @@ def coconat_state(args):
 
     for i in range(len(sequences)):
         seq_labels, seq_probs = ["i"] * lengths[i], [[1.0, 0.0] for _ in range(lengths[i])]
-        for seg in segs[seq_ids[i]]:
+        for seg in segs.get(seq_ids[i], []):
             for k in range(seg[0], seg[1]):
                 seq_labels[k] = "C"
                 seq_probs[k][0] = 0.0
