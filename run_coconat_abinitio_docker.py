@@ -76,6 +76,7 @@ def main(argv):
   print("Mounting %s on %s" % (source_output_dir, mnt_output))
 
   command_args.extend([
+         'abinitio',
          '-f',
          f'{target_fasta_file}',
          '-o',
