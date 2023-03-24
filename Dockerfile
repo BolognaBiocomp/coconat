@@ -11,6 +11,4 @@ RUN python -m pip install --upgrade pip && \
 
 COPY . .
 
-ENV TRANSFORMERS_CACHE=/app/coconat
-
 ENTRYPOINT ["/app/coconat/coconat.py"]
