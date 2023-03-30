@@ -41,6 +41,7 @@ def embedd(args):
         np.save(outfile, e)
 
     work_env.destroy()
+    
     return 0
 
 def main():
