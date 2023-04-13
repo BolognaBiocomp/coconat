@@ -131,6 +131,7 @@ def predict_oligo_state(samples):
     checkpoint = torch.load(cfg.COCONAT_OLIGO_MODEL)
     del checkpoint["state_dict"]["loss_fn.weight"]
     model.load_state_dict(checkpoint["state_dict"])
+    model.eval()
     pred = model(torch.tensor(samples).float()).detach().cpu().numpy()
     print(pred)
     probs = []
