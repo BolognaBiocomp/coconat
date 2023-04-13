@@ -135,6 +135,6 @@ def predict_oligo_state(samples):
     probs = []
     oligo_states = []
     for i in range(pred.shape[0]):
-        oligo_states.append(oligo_map[np.argmax(pred[i,0])])
-        probs.append(np.max(pred[i,0]))
+        oligo_states.append(oligo_map[np.argmax(pred[i])])
+        probs.append(np.max(pred[i]))
     return oligo_states, probs
