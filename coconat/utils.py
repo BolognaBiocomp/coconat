@@ -132,7 +132,10 @@ def predict_oligo_state(samples):
     del checkpoint["state_dict"]["loss_fn.weight"]
     model.load_state_dict(checkpoint["state_dict"])
     model.eval()
-    pred = model(torch.tensor(samples).float()).detach().cpu().numpy()
+    x = torch.tensor(samples).float()
+    print(x.shape)
+    print(x)
+    pred = model(x).detach().cpu().numpy()
     print(pred)
     probs = []
     oligo_states = []
