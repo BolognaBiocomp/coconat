@@ -44,13 +44,13 @@ def coconat_state(args):
         line = line.split()
         if line[0] not in segs:
             segs[line[0]] = []
-        segs[line[0]].append((int(line[1])-1,int(line[2])))
+        segs[line[0]].append((int(line[1])-1,int(line[2]),line[3]))
 
     for i in range(len(sequences)):
         seq_labels, seq_probs = ["i"] * lengths[i], [[1.0, 0.0] for _ in range(lengths[i])]
         for seg in segs.get(seq_ids[i], []):
-            for k in range(seg[0], seg[1]):
-                seq_labels[k] = "C"
+            for (j,k) in enumerate(range(seg[0], seg[1])):
+                seq_labels[k] = seg[2][j]
                 seq_probs[k][0] = 0.0
                 seq_probs[k][1] = 1.0
         labels.append(seq_labels)
@@ -61,10 +61,13 @@ def coconat_state(args):
     oligo_samples = []
     for i in range(len(sequences)):
         oligo_preds[i] = (["i"]*lengths[i], [0.0]*lengths[i])
-        if len(re.findall("C+","".join(labels[i]))) > 0:
-            for m in re.finditer("C+","".join(labels[i])):
+        if len(re.findall("[abcdefg]+","".join(labels[i]))) > 0:
+            for m in re.finditer("[abcdefg]+","".join(labels[i])):
                 cc_segments.append((i, m.start(), m.end()))
-                v = np.mean(samples[i,m.start():m.end(),:], axis=0)
+                r = np.zeros(7)
+                r["abcdefg".index("".join(labels[i])[m.start()])] = 1.0
+                v = numpy.concatenate(np.mean(samples[i,m.start():m.end(),:], axis=0),
+                                      r, numpy.array([m.end()-m.start()])
                 oligo_samples.append(np.expand_dims(v, axis=0))
     oligo_samples = np.array(oligo_samples)
 

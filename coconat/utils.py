@@ -12,6 +12,7 @@ logging.set_verbosity(50)
 import subprocess
 
 from . import coconatconfig as cfg
+from . import models as stmod
 
 def chunk_sequence(recid, sequence):
     if len(sequence) <= 1022:
@@ -125,7 +126,8 @@ def crf_refine(register_file, work_env):
 
 def predict_oligo_state(samples):
     oligo_map = {0:"A",1:"P",2:"3",3:"4"}
-    model = tf.keras.models.load_model(cfg.COCONAT_OLIGO_MODEL)
+    #model = tf.keras.models.load_model(cfg.COCONAT_OLIGO_MODEL)
+    model =
     pred = model.predict(samples)
     probs = []
     oligo_states = []
