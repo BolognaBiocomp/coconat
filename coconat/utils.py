@@ -125,7 +125,7 @@ def crf_refine(register_file, work_env):
     return labels, probs
 
 def predict_oligo_state(samples):
-    oligo_map = {0:"A",1:"P",2:"3",3:"4"}
+    oligo_map = {1:"A",0:"P",2:"3",3:"4"}
     #model = tf.keras.models.load_model(cfg.COCONAT_OLIGO_MODEL)
     model = stmod.MeanModel()
     checkpoint = torch.load(cfg.COCONAT_OLIGO_MODEL)
