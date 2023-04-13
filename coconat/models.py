@@ -13,5 +13,5 @@ class MeanModel(nn.Module):
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
-        x = self.linear(x)
+        x = self.softmax(self.linear(x))
         return x

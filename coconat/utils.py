@@ -127,8 +127,11 @@ def crf_refine(register_file, work_env):
 def predict_oligo_state(samples):
     oligo_map = {0:"A",1:"P",2:"3",3:"4"}
     #model = tf.keras.models.load_model(cfg.COCONAT_OLIGO_MODEL)
-    model =
-    pred = model.predict(samples)
+    model = stmod.MeanModel()
+    checkpoint = torch.load(cfg.COCONAT_OLIGO_MODEL)
+    del checkpoint["state_dict"]["loss_fn.weight"]
+    model.load_state_dict(checkpoint["state_dict"])
+    pred = model(torch.tensor(samples).float()).detach().cpu().numpy()
     probs = []
     oligo_states = []
     for i in range(pred.shape[0]):
