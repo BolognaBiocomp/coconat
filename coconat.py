@@ -68,7 +68,7 @@ def coconat_state(args):
                 r["abcdefg".index("".join(labels[i])[m.start()])] = 1.0
                 v = np.concatenate((np.mean(samples[i,m.start():m.end(),:], axis=0),
                                     r, np.array([m.end()-m.start()])))
-                oligo_samples.append(np.expand_dims(v, axis=0))
+                oligo_samples.append(v)
     oligo_samples = np.array(oligo_samples)
 
     oligo_states, oligo_probs = utils.predict_oligo_state(oligo_samples)
