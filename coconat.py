@@ -66,8 +66,8 @@ def coconat_state(args):
                 cc_segments.append((i, m.start(), m.end()))
                 r = np.zeros(7)
                 r["abcdefg".index("".join(labels[i])[m.start()])] = 1.0
-                v = numpy.concatenate(np.mean(samples[i,m.start():m.end(),:], axis=0),
-                                      r, numpy.array([m.end()-m.start()])
+                v = np.concatenate((np.mean(samples[i,m.start():m.end(),:], axis=0),
+                                    r, numpy.array([m.end()-m.start()]))
                 oligo_samples.append(np.expand_dims(v, axis=0))
     oligo_samples = np.array(oligo_samples)
 

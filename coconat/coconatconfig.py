@@ -6,7 +6,7 @@ COCONAT_REGISTER_MODEL = "%s/models/dlModel" % COCONAT_ROOT
 
 COCONAT_CRF_MODEL = "%s/models/crfModel" % COCONAT_ROOT
 
-COCONAT_OLIGO_MODEL = "%s/models/oligoModel.hdf5" % COCONAT_ROOT
+COCONAT_OLIGO_MODEL = "%s/models/oligoModel.ckpt" % COCONAT_ROOT
 
 CRF_BIN = "%s/tools/biocrf-static" % COCONAT_ROOT
 
