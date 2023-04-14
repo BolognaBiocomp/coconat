@@ -116,11 +116,15 @@ def coconat_abinitio(args):
         if len(re.findall("[abcdefgH]+","".join(labels[i]))) > 0:
             for m in re.finditer("[abcdefgH]+","".join(labels[i])):
                 cc_segments.append((i, m.start(), m.end()))
-                r = np.zeros(7)
-                r["abcdefg".index("".join(labels[i])[m.start()])] = 1.0
-                
-                v = np.concatenate((np.mean(samples[i,m.start():m.end(),:], axis=0),
-                                    r, np.array([m.end()-m.start()])))
+                v, u = [], []
+                for k in range(m.start(), m.end()):
+                    if "".join(labels[i])[k] == "a":
+                        v.append(samples[i,k,:])
+                    elif "".join(labels[i])[k] == "d":
+                        u.append(samples[i,k,:])
+
+                v = np.concatenate((np.mean(np.array(v), axis=0),
+                                    np.mean(np.array(u), axis=0))
                 oligo_samples.append(v)
     oligo_samples = np.array(oligo_samples)
 

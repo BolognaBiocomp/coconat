@@ -5,10 +5,10 @@ class MeanModel(nn.Module):
     def __init__(self):
         super().__init__()
         self.linear = nn.Sequential(
-                        nn.Linear(2312, 64),
+                        nn.Linear(4608, 128),
                         nn.Dropout(p=0.1),
                         nn.ReLU(),
-                        nn.Linear(64, 4)
+                        nn.Linear(128, 4)
                         )
         self.softmax = nn.Softmax(dim=1)
 
