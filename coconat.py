@@ -124,7 +124,7 @@ def coconat_abinitio(args):
                         u.append(samples[i,k,:])
 
                 v = np.concatenate((np.mean(np.array(v), axis=0),
-                                    np.mean(np.array(u), axis=0))
+                                    np.mean(np.array(u), axis=0)))
                 oligo_samples.append(v)
     oligo_samples = np.array(oligo_samples)
 
