@@ -122,9 +122,20 @@ def coconat_abinitio(args):
                         v.append(samples[i,k,:])
                     elif "".join(labels[i])[k] == "d":
                         u.append(samples[i,k,:])
+                if len(u) > 0 and len(v) > 0:
+                    v = np.concatenate((np.mean(np.array(v), axis=0),
+                                        np.mean(np.array(u), axis=0)))
+                elif len(u) == 0 and len(v) == 0:
+                    v = np.zeros(2 * samples.shape[2])
+                elif len(u) == 0:
+                    v = np.concatenate((np.mean(np.array(v), axis=0),
+                                        np.zeros(samples.shape[2])))
+                elif len(v) == 0:
+                    v = np.concatenate((np.zeros(samples.shape[2]),
+                                        np.mean(np.array(u), axis=0)))
+                else:
+                    v = np.zeros(2 * samples.shape[2])
 
-                v = np.concatenate((np.mean(np.array(v), axis=0),
-                                    np.mean(np.array(u), axis=0)))
                 oligo_samples.append(v)
     oligo_samples = np.array(oligo_samples)
 
