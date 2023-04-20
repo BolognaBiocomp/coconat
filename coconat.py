@@ -64,10 +64,31 @@ def coconat_state(args):
         if len(re.findall("[abcdefg]+","".join(labels[i]))) > 0:
             for m in re.finditer("[abcdefg]+","".join(labels[i])):
                 cc_segments.append((i, m.start(), m.end()))
+                """
                 r = np.zeros(7)
                 r["abcdefg".index("".join(labels[i])[m.start()])] = 1.0
                 v = np.concatenate((np.mean(samples[i,m.start():m.end(),:], axis=0),
                                     r, np.array([m.end()-m.start()])))
+                """
+                v, u = [], []
+                for k in range(m.start(), m.end()):
+                    if "".join(labels[i])[k] == "a":
+                        v.append(samples[i,k,:])
+                    elif "".join(labels[i])[k] == "d":
+                        u.append(samples[i,k,:])
+                if len(u) > 0 and len(v) > 0:
+                    v = np.concatenate((np.mean(np.array(v), axis=0),
+                                        np.mean(np.array(u), axis=0)))
+                elif len(u) == 0 and len(v) == 0:
+                    v = np.zeros(2 * samples.shape[2])
+                elif len(u) == 0:
+                    v = np.concatenate((np.mean(np.array(v), axis=0),
+                                        np.zeros(samples.shape[2])))
+                elif len(v) == 0:
+                    v = np.concatenate((np.zeros(samples.shape[2]),
+                                        np.mean(np.array(u), axis=0)))
+                else:
+                    v = np.zeros(2 * samples.shape[2])
                 oligo_samples.append(v)
     oligo_samples = np.array(oligo_samples)
 
