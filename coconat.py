@@ -96,9 +96,12 @@ def coconat_state(args):
 
     with open(args.outfile, 'w') as outf:
         print("ID", "RES", "CC_CLASS", "OligoState", "Pi", "Pa", "Pb", "Pc", "Pd", "Pe", "Pf", "Pg", "PH", "POligo", sep="\t", file=outf)
+
         for i in range(len(sequences)):
             for j in range(lengths[i]):
-                print(seq_ids[i], sequences[i][j], labels[i][j], oligo_preds[i][0][j], *[round(x,2) for x in list(probs[i][j])], oligo_preds[i][1][j], sep="\t", file=outf)
+                probs = [0.0]*8
+                probs["iabcdefgH".index(labels[i][j])] = 1.0
+                print(seq_ids[i], sequences[i][j], labels[i][j], oligo_preds[i][0][j], *[round(x,2) for x in probs], oligo_preds[i][1][j], sep="\t", file=outf)
         outf.close()
     work_env.destroy()
     """
