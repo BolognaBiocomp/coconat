@@ -99,7 +99,7 @@ def coconat_state(args):
 
         for i in range(len(sequences)):
             for j in range(lengths[i]):
-                probs = [0.0]*8
+                probs = [0.0]*9
                 probs["iabcdefgH".index(labels[i][j])] = 1.0
                 print(seq_ids[i], sequences[i][j], labels[i][j], oligo_preds[i][0][j], *[round(x,2) for x in probs], oligo_preds[i][1][j], sep="\t", file=outf)
         outf.close()
