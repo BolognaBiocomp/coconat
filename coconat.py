@@ -45,7 +45,7 @@ def coconat_state(args):
         if line[0] not in segs:
             segs[line[0]] = []
         segs[line[0]].append((int(line[1])-1,int(line[2]),line[3]))
-    assert(sum([len(segs[i]) for i in segs]) >= lens(segs.keys()))
+    assert(sum([len(segs[i]) for i in segs]) >= len(segs.keys()))
     for i in range(len(sequences)):
         seq_labels, seq_probs = ["i"] * lengths[i], [[1.0, 0.0] for _ in range(lengths[i])]
         for seg in segs.get(seq_ids[i], []):
