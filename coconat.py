@@ -64,12 +64,6 @@ def coconat_state(args):
         if len(re.findall("[abcdefg]+","".join(labels[i]))) > 0:
             for m in re.finditer("[abcdefg]+","".join(labels[i])):
                 cc_segments.append((i, m.start(), m.end()))
-                """
-                r = np.zeros(7)
-                r["abcdefg".index("".join(labels[i])[m.start()])] = 1.0
-                v = np.concatenate((np.mean(samples[i,m.start():m.end(),:], axis=0),
-                                    r, np.array([m.end()-m.start()])))
-                """
                 v, u = [], []
                 for k in range(m.start(), m.end()):
                     if "".join(labels[i])[k] == "a":
@@ -93,13 +87,28 @@ def coconat_state(args):
     oligo_samples = np.array(oligo_samples)
 
     oligo_states, oligo_probs = utils.predict_oligo_state(oligo_samples)
+    for k, s in enumerate(cc_segments):
+        st, pr = oligo_preds[s[0]]
+        for j in range(s[1],s[2]):
+            st[j] = oligo_states[k]
+            pr[j] = oligo_probs[k]
+        oligo_preds[s[0]] = (st, pr)
 
+    with open(args.outfile, 'w') as outf:
+        print("ID", "RES", "CC_CLASS", "OligoState", "Pi", "Pa", "Pb", "Pc", "Pd", "Pe", "Pf", "Pg", "PH", "POligo", sep="\t", file=outf)
+        for i in range(len(sequences)):
+            for j in range(lengths[i]):
+                print(seq_ids[i], sequences[i][j], labels[i][j], oligo_preds[i][0][j], *[round(x,2) for x in list(probs[i][j])], oligo_preds[i][1][j], sep="\t", file=outf)
+        outf.close()
+
+    """
     with open(args.outfile, 'w') as outf:
         print("ID", "START", "END", "OligoST", "OligoProb", sep="\t", file=outf)
         for k, s in enumerate(cc_segments):
             print(seq_ids[s[0]], s[1]+1, s[2], oligo_states[k], oligo_probs[k], sep="\t", file=outf)
         outf.close()
     work_env.destroy()
+    """
     return 0
 
 def coconat_abinitio(args):
