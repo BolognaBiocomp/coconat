@@ -141,7 +141,7 @@ def coconat_abinitio(args):
     for i in range(len(sequences)):
         samples.append(np.hstack((prot_t5_embeddings[i], esm1b_embeddings[i])))
     samples = [torch.from_numpy(x) for x in samples]
-    samples = nn.utils.rnn.pad_sequence(X, batch_first=True)
+    samples = torch.nn.utils.rnn.pad_sequence(X, batch_first=True)
     #samples = tf.keras.utils.pad_sequences(samples, padding="post", dtype="float32")
     register_file = utils.predict_register_probability_torch(samples, lengths, work_env)
     labels, probs = utils.crf_refine(register_file, work_env)
