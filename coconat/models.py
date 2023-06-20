@@ -58,7 +58,7 @@ class MMModelLSTM(nn.Module):
             TransposeX(),
             nn.BatchNorm1d(HIDDEN_DIM),
             TransposeX(),
-            nn.Linear(HIDDEN_DIM, self.out_size)
+            nn.Linear(HIDDEN_DIM, OUT_SIZE)
         )
         self.final = nn.Softmax(dim=-1)
 
