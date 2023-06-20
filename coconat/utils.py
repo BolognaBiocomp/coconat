@@ -98,7 +98,7 @@ def predict_register_probability(samples, lengths, work_env):
 def predict_register_probability_torch(samples, lengths, work_env):
     register_out_file = work_env.createFile("registers.", ".tsv")
     checkpoint = torch.load(cfg.COCONAT_REGISTER_MODEL_TORCH)
-    model = MMModelLSTM()
+    model = stmod.MMModelLSTM()
     model.load_state_dict(checkpoint["state_dict"])
     model.eval()
 
