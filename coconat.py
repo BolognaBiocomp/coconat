@@ -190,7 +190,7 @@ def coconat_abinitio(args):
             for j in range(lengths[i]):
                 print(seq_ids[i], sequences[i][j], labels[i][j], oligo_preds[i][0][j], *[round(x,2) for x in list(probs[i][j])], oligo_preds[i][1][j], sep="\t", file=outf)
         outf.close()
-    #work_env.destroy()
+    work_env.destroy()
     return 0
 
 def main():
