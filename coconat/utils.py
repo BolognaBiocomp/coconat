@@ -151,8 +151,8 @@ def predict_oligo_state(samples):
         del checkpoint["state_dict"]["loss_fn.weight"]
         model.load_state_dict(checkpoint["state_dict"])
         model.eval()
-        #x = torch.tensor(samples).float()
-        pred = model(samples).detach().cpu().numpy()
+        x = torch.tensor(samples).float()
+        pred = model(x).detach().cpu().numpy()
         for i in range(pred.shape[0]):
             oligo_states.append(oligo_map[np.argmax(pred[i])])
             probs.append(np.max(pred[i]))
