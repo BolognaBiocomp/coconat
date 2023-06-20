@@ -144,6 +144,7 @@ def coconat_abinitio(args):
     samples = torch.nn.utils.rnn.pad_sequence(samples, batch_first=True)
     #samples = tf.keras.utils.pad_sequences(samples, padding="post", dtype="float32")
     register_file = utils.predict_register_probability_torch(samples, lengths, work_env)
+    samples = samples.detach().cpu().numpy()
     labels, probs = utils.crf_refine(register_file, work_env)
     cc_segments = []
     oligo_preds = {}
