@@ -95,6 +95,23 @@ def predict_register_probability(samples, lengths, work_env):
         rof.close()
     return register_out_file
 
+def predict_register_probability_torch(samples, lengths, work_env):
+    register_out_file = work_env.createFile("registers.", ".tsv")
+    checkpoint = torch.load(cfg.COCONAT_REGISTER_MODEL_TORCH)
+    model = MMModelLSTM()
+    model.load_state_dict(checkpoint["state_dict"])
+    model.eval()
+
+    pred = model(samples, lengths).detach().cpu().numpy()
+
+    with open(register_out_file, 'w') as rof:
+        for i in range(pred.shape[0]):
+            for j in range(lengths[i]):
+                print(*[str(x) for x in pred[i,j]], "i", file=rof, sep=" ")
+            print("", file=rof)
+        rof.close()
+    return register_out_file
+
 def crf_refine(register_file, work_env):
     crf_stdout = work_env.createFile("crf.stdout.", ".log")
     crf_stderr = work_env.createFile("crf.stderr.", ".log")
@@ -134,8 +151,8 @@ def predict_oligo_state(samples):
         del checkpoint["state_dict"]["loss_fn.weight"]
         model.load_state_dict(checkpoint["state_dict"])
         model.eval()
-        x = torch.tensor(samples).float()
-        pred = model(x).detach().cpu().numpy()
+        #x = torch.tensor(samples).float()
+        pred = model(samples).detach().cpu().numpy()
         for i in range(pred.shape[0]):
             oligo_states.append(oligo_map[np.argmax(pred[i])])
             probs.append(np.max(pred[i]))

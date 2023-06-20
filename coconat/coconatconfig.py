@@ -4,6 +4,8 @@ COCONAT_PLM_DIR = "/mnt/plms"
 
 COCONAT_REGISTER_MODEL = "%s/models/dlModel" % COCONAT_ROOT
 
+COCONAT_REGISTER_MODEL_TORCH = "%s/models/dlModel.ckpt" % COCONAT_ROOT
+
 COCONAT_CRF_MODEL = "%s/models/crfModel" % COCONAT_ROOT
 
 COCONAT_OLIGO_MODEL = "%s/models/oligoModel.ckpt" % COCONAT_ROOT

@@ -5,7 +5,7 @@ import argparse
 import sys
 import re
 import numpy as np
-import tensorflow as tf
+#import tensorflow as tf
 
 from Bio import SeqIO
 
@@ -37,7 +37,9 @@ def coconat_state(args):
     samples = []
     for i in range(len(sequences)):
         samples.append(np.hstack((prot_t5_embeddings[i], esm1b_embeddings[i])))
-    samples = tf.keras.utils.pad_sequences(samples, padding="post", dtype="float32")
+    #samples = tf.keras.utils.pad_sequences(samples, padding="post", dtype="float32")
+    samples = [torch.from_numpy(x) for x in samples]
+    samples = nn.utils.rnn.pad_sequence(X, batch_first=True)
     labels, probs = [], []
     segs = {}
     for line in open(args.segments):
@@ -138,8 +140,10 @@ def coconat_abinitio(args):
     samples = []
     for i in range(len(sequences)):
         samples.append(np.hstack((prot_t5_embeddings[i], esm1b_embeddings[i])))
-    samples = tf.keras.utils.pad_sequences(samples, padding="post", dtype="float32")
-    register_file = utils.predict_register_probability(samples, lengths, work_env)
+    samples = [torch.from_numpy(x) for x in samples]
+    samples = nn.utils.rnn.pad_sequence(X, batch_first=True)
+    #samples = tf.keras.utils.pad_sequences(samples, padding="post", dtype="float32")
+    register_file = utils.predict_register_probability_torch(samples, lengths, work_env)
     labels, probs = utils.crf_refine(register_file, work_env)
     cc_segments = []
     oligo_preds = {}
