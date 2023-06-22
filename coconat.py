@@ -39,7 +39,7 @@ def coconat_state(args):
         samples.append(np.hstack((prot_t5_embeddings[i], esm1b_embeddings[i])))
     #samples = tf.keras.utils.pad_sequences(samples, padding="post", dtype="float32")
     samples = [torch.from_numpy(x) for x in samples]
-    samples = nn.utils.rnn.pad_sequence(X, batch_first=True)
+    samples = torch.nn.utils.rnn.pad_sequence(samples, batch_first=True).detach().cpu().numpy()
     labels, probs = [], []
     segs = {}
     for line in open(args.segments):
