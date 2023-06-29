@@ -30,7 +30,7 @@ Build the Docker image:
 docker build -t coconat:1.0 .
 ```
 
-Download the ESM and ProtT5 pLMs (e.g. on /home/cas/plms):
+Download the ESM and ProtT5 pLMs (e.g. on ${HOME}/plms):
 
 ```
 cd
@@ -39,6 +39,7 @@ cd plms
 mkdir esm
 cd esm
 wget https://dl.fbaipublicfiles.com/fair-esm/models/esm1b_t33_650M_UR50S.pt
+wget https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t33_650M_UR50D-contact-regression.pt
 cd ..
 git lfs install
 git clone https://huggingface.co/Rostlab/prot_t5_xl_uniref50
@@ -53,5 +54,5 @@ ProtT5 pLMs are stored, as follows:
 ```
 cd coconat
 python run_coconat_docker.py --fasta_file=example-data/example.fasta \
---output_file=example-data/example.tsv --plm_dir=/home/cas/plms
+--output_file=example-data/example.tsv --plm_dir=${HOME}/plms
 ```
