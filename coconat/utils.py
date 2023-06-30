@@ -1,7 +1,5 @@
 import sys
 import re
-import tensorflow as tf
-import h5py
 import numpy as np
 import torch
 import esm
@@ -83,18 +81,6 @@ def embed_esm(sequences, seq_ids):
         ret.append(token_representations[i, 1 : tokens_len - 1].detach().cpu().numpy())
     return ret
 
-def predict_register_probability(samples, lengths, work_env):
-    model = tf.keras.models.load_model(cfg.COCONAT_REGISTER_MODEL)
-    register_out_file = work_env.createFile("registers.", ".tsv")
-    pred = model.predict(samples)
-    with open(register_out_file, 'w') as rof:
-        for i in range(pred.shape[0]):
-            for j in range(lengths[i]):
-                print(*[str(x) for x in pred[i,j]], "i", sep=" ", file=rof)
-            print("", file=rof)
-        rof.close()
-    return register_out_file
-
 def predict_register_probability_torch(samples, lengths, work_env):
     register_out_file = work_env.createFile("registers.", ".tsv")
     checkpoint = torch.load(cfg.COCONAT_REGISTER_MODEL_TORCH)
@@ -145,7 +131,6 @@ def predict_oligo_state(samples):
     oligo_states, probs = [], []
     oligo_map = {1:"A",0:"P",2:"3",3:"4"}
     if len(samples) > 0:
-        #model = tf.keras.models.load_model(cfg.COCONAT_OLIGO_MODEL)
         model = stmod.MeanModel()
         checkpoint = torch.load(cfg.COCONAT_OLIGO_MODEL)
         del checkpoint["state_dict"]["loss_fn.weight"]

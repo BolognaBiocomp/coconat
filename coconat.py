@@ -1,11 +1,9 @@
 #!/usr/local/bin/python -W ignore
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import argparse
 import sys
 import re
 import numpy as np
-#import tensorflow as tf
 import torch
 from Bio import SeqIO
 
