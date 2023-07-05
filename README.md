@@ -52,6 +52,26 @@ ProtT5 pLMs are stored, as follows:
 
 ```
 cd coconat
-python run_coconat_docker.py --fasta_file=example-data/example.fasta \
+python run_coconat_abinitio_docker.py --fasta_file=example-data/example.fasta \
 --output_file=example-data/example.tsv --plm_dir=${HOME}/coconat-plms
 ```
+
+If coiled coil segment boundaries are already available for your sequences and
+you only want to predict their oligomeric state, you can run:
+
+```
+python run_coconat_state_docker.py --fasta_file=example-data/example.fasta \
+--output_file=example-data/example.tsv --plm_dir=${HOME}/coconat-plms \
+--seg_file=example-data/example-seg.tsv
+```
+
+where example-seg.tsv file looks like the following:
+```
+Q99LE1  76  93
+P95883  7   18
+P95883  26  36
+```
+
+The sequence Q99LE1 has a single coiled coil segment from position 76 to 93,
+while the sequence P95883 has two segments, from position 7 to 18 and from
+position 26 to 36.
