@@ -67,11 +67,12 @@ python run_coconat_state_docker.py --fasta_file=example-data/example.fasta \
 
 where example-seg.tsv file looks like the following:
 ```
-Q99LE1  76  93
-P95883  7   18
-P95883  26  36
+Q99LE1  76  93  abcdefgabcdefgabcd
+P16087  60  71  defgabcdefga
+P16087  80  91  defgabcdefga
 ```
 
 The sequence Q99LE1 has a single coiled coil segment from position 76 to 93,
-while the sequence P95883 has two segments, from position 7 to 18 and from
-position 26 to 36.
+with heptad repeat register abcdefgabcdefgabcd, while the sequence P95883 has
+two segments, from position 7 to 18 and from position 26 to 36, both with
+heptad annotation defgabcdefga.
