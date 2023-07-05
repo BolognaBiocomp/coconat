@@ -46,9 +46,9 @@ tar xvzf coconat-plms.tar.gz
 
 ## Run CoCoNat
 
-To run the program use the run_coconat_docker.py script inside the CoCoNat root
-directory, providing a FASTA file an output file, and the path where ESM2 and
-ProtT5 pLMs are stored, as follows:
+To run the program use the run_coconat_abinitio_docker.py script inside the
+CoCoNat root directory, providing a FASTA file an output file, and the path
+where ESM2 and ProtT5 pLMs are stored, as follows:
 
 ```
 cd coconat
