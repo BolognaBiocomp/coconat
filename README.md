@@ -1,6 +1,12 @@
 # coconat
 Coiled coil predictor
 
+## Requirements
+
+CoCoNat requires Docker Engine to be installed. Please, follow this instructions
+for the installation of Docker Engine on a Debian system:
+
+https://docs.docker.com/engine/install/debian/
 
 ## Installation
 
@@ -20,7 +26,7 @@ pip install docker absl-py
 Clone this repo and cd into the package dir:
 
 ```
-git clone git@github.com:savojard/coconat.git
+git clone https://github.com/BolognaBiocomp/coconat
 cd coconat
 ```
 
@@ -30,29 +36,22 @@ Build the Docker image:
 docker build -t coconat:1.0 .
 ```
 
-Download the ESM and ProtT5 pLMs (e.g. on ${HOME}/plms):
+Download the ESM and ProtT5 pLMs (e.g. on ${HOME}):
 
 ```
 cd
-mkdir plms
-cd plms
-mkdir esm
-cd esm
-wget https://dl.fbaipublicfiles.com/fair-esm/models/esm1b_t33_650M_UR50S.pt
-wget https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t33_650M_UR50D-contact-regression.pt
-cd ..
-git lfs install
-git clone https://huggingface.co/Rostlab/prot_t5_xl_uniref50
+wget https://coconat.biocomp.unibo.it/static/data/coconat-plms.tar.gz
+tar xvzf coconat-plms.tar.gz
 ```
 
 ## Run CoCoNat
 
 To run the program use the run_coconat_docker.py script inside the CoCoNat root
-directory, providing a FASTA file an output file, and the path where ESM and
+directory, providing a FASTA file an output file, and the path where ESM2 and
 ProtT5 pLMs are stored, as follows:
 
 ```
 cd coconat
 python run_coconat_docker.py --fasta_file=example-data/example.fasta \
---output_file=example-data/example.tsv --plm_dir=${HOME}/plms
+--output_file=example-data/example.tsv --plm_dir=${HOME}/coconat-plms
 ```
