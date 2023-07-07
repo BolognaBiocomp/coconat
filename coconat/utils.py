@@ -63,7 +63,7 @@ def embed_prot_t5(sequences):
 
 def embed_esm(sequences, seq_ids):
     #device = torch.device(cfg.DEVICE)
-    print("Loading pretrained ESM1-b model...", file=sys.stderr)
+    print("Loading pretrained ESM2 model...", file=sys.stderr)
     model, alphabet = esm.pretrained.load_model_and_alphabet(cfg.ESM_MODEL)
     #model.to(device)
     print("Done", file=sys.stderr)
