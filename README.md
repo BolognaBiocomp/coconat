@@ -56,6 +56,33 @@ python run_coconat_abinitio_docker.py --fasta_file=example-data/example.fasta \
 --output_file=example-data/example.tsv --plm_dir=${HOME}/coconat-plms
 ```
 
+The output file (example-data/example.tsv) looks like the following:
+
+```
+ID      RES     CC_CLASS        OligoState      Pi      Pa      Pb      Pc      Pd      Pe      Pf      Pg      PH      POligo
+Q99LE1  T       i       i       0.9     0.01    0.04    0.0     0.01    0.03    0.0     0.0     0.0     0.0
+Q99LE1  R       i       i       0.83    0.01    0.0     0.07    0.01    0.0     0.07    0.01    0.0     0.0
+Q99LE1  L       i       i       0.66    0.01    0.0     0.0     0.15    0.0     0.0     0.17    0.0     0.0
+Q99LE1  Q       a       A       0.37    0.5     0.01    0.0     0.01    0.11    0.0     0.0     0.0     0.7615782
+Q99LE1  F       b       A       0.24    0.0     0.61    0.01    0.0     0.0     0.14    0.0     0.0     0.7615782
+Q99LE1  K       c       A       0.14    0.0     0.0     0.68    0.01    0.0     0.0     0.16    0.0     0.7615782
+Q99LE1  I       d       A       0.05    0.15    0.0     0.0     0.8     0.0     0.0     0.0     0.0     0.7615782
+Q99LE1  V       e       A       0.02    0.0     0.15    0.0     0.0     0.82    0.0     0.0     0.0     0.7615782
+Q99LE1  R       f       A       0.01    0.0     0.0     0.15    0.0     0.0     0.83    0.0     0.0     0.7615782
+Q99LE1  V       g       A       0.01    0.0     0.0     0.0     0.15    0.0     0.0     0.84    0.0     0.7615782
+Q99LE1  M       a       A       0.0     0.97    0.0     0.0     0.0     0.02    0.0     0.0     0.0     0.7615782
+```
+
+You have one row for each residues, and columns are defined as follows:
+
+* ID: protein accession, as reported in the input FASTA file
+* RES: residue name
+* CC_CLASS: predicted coiled-coil class, a-g for registers and i for non-coiled coil regions
+* OligoState: predicted oligomeric state (the same for all residues in the helix). Can be A=antiparallel dimer, P=parallel dimer, 3=trimer, 4=tetramer
+* Pi: probability for the residue to be in a non-coiled coil region
+* Pa-PH: hepatad repeat registers probabilities
+* POligo: probability of the predicted oligomeric state (the same for all residues in the helix)
+
 If coiled coil segment boundaries are already available for your sequences and
 you only want to predict their oligomeric state, you can run:
 
