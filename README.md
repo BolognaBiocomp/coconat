@@ -77,7 +77,7 @@ You have one row for each residues, and columns are defined as follows:
 
 * ID: protein accession, as reported in the input FASTA file
 * RES: residue name
-* CC_CLASS: predicted coiled-coil class, a-g for registers and i for non-coiled coil regions
+* CC_CLASS: predicted coiled-coil class, a-g for registers, i for non-coiled coil regions
 * OligoState: predicted oligomeric state (the same for all residues in the helix). Can be A=antiparallel dimer, P=parallel dimer, 3=trimer, 4=tetramer
 * Pi: probability for the residue to be in a non-coiled coil region
 * Pa-PH: hepatad repeat registers probabilities
@@ -103,3 +103,44 @@ The sequence Q99LE1 has a single coiled coil segment from position 76 to 93,
 with heptad repeat register abcdefgabcdefgabcd, while the sequence P95883 has
 two segments, from position 7 to 18 and from position 26 to 36, both with
 heptad annotation defgabcdefga.
+
+## Running outside Docker
+
+If you are not able to use the Docker, it is also possible to run CoCoNat directly using the source code. To do so, you firstly need to create a conda environment and install all dependencies:
+
+```
+conda create -n coconat python=3.8
+conda activate coconat
+```
+
+Install dependencies:
+
+```
+python -m pip install --upgrade pip
+pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
+pip install --no-cache-dir numpy biopython fair-esm transformers[torch] sentencepiece
+```
+
+After that, move to the CoCaNat package root and open with your preferred editor the coconat/coconatconfig.py file.
+Then, you need to modify the following variables:
+
+```
+# This need to point the actual CoCoNat package root directory in you machine
+COCONAT_ROOT = "/app/coconat"
+
+# This need to point the actual directory storing ESM2 and ProtT5 models in you machine:
+COCONAT_PLM_DIR = "/mnt/plms"
+```
+
+Now, you are able to run the coconat.py script placed in the CoCoNat package root.
+
+For abinitio (coiled-coil helix, registers and oligomeric state) prediction run:
+```
+python coconat.py abinitio -f example-data/example.fasta -o example-data/example.tsv
+```
+
+For oligomeric state prediction run:
+
+```
+python coconat.py state -f example-data/example.fasta -s example-data/example-seg.tsv -o example-data/example.tsv
+```
