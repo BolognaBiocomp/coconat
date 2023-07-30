@@ -218,8 +218,11 @@ def main():
     oligostparser.set_defaults(func=coconat_state)
 
     args = parser.parse_args()
-    ret = args.func(args)
-    return ret
+    if len(sys.argv) == 1:
+        parser.print_help()
+    else:
+        ret = args.func(args)
+        return ret
 
 
 
