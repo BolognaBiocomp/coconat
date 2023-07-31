@@ -125,7 +125,6 @@ Clone this repo:
 
 ```
 git clone https://github.com/BolognaBiocomp/coconat
-
 ```
 
 Download the ESM and ProtT5 pLMs (e.g. on ${HOME}):
