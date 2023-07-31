@@ -121,15 +121,34 @@ pip3 install torch torchvision torchaudio --extra-index-url https://download.pyt
 pip install --no-cache-dir numpy biopython fair-esm transformers[torch] sentencepiece
 ```
 
+Clone this repo:
+
+```
+git clone https://github.com/BolognaBiocomp/coconat
+cd coconat
+```
+
+Download the ESM and ProtT5 pLMs (e.g. on ${HOME}):
+
+```
+cd
+wget https://coconat.biocomp.unibo.it/static/data/coconat-plms.tar.gz
+tar xvzf coconat-plms.tar.gz
+```
+
 After that, move to the CoCaNat package root and open with your preferred editor the coconat/coconatconfig.py file.
 Then, you need to modify the following variables:
 
 ```
-# This need to point the actual CoCoNat package root directory in you machine
+# This need to point the actual CoCoNat package root directory in you machine, e.g. /home/cas/coconat
 COCONAT_ROOT = "/app/coconat"
+=>
+COCONAT_ROOT = "/home/cas/coconat"
 
-# This need to point the actual directory storing ESM2 and ProtT5 models in you machine:
+# This need to point the actual directory storing ESM2 and ProtT5 models in you machine, e.g (/home/cas/coconat-plms):
 COCONAT_PLM_DIR = "/mnt/plms"
+=>
+COCONAT_PLM_DIR = "/home/cas/coconat-plms"
 ```
 
 Now, you are able to run the coconat.py script placed in the CoCoNat package root.
