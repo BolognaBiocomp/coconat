@@ -8,8 +8,8 @@ for the installation of Docker Engine on a Debian system:
 
 https://docs.docker.com/engine/install/debian/
 
-CoCoNat required loading of large pre-trained protein language models in memory.
-We suggest to run CoCoNat on a machine with at least 4 CPU cores and 48GB of RAM.
+CoCoNat requires the loading of large pre-trained protein language models (ProtT5 and ESM2)
+in memory. We suggest to run CoCoNat on a machine with at least 4 CPU cores and 48GB of RAM.
 
 ## Installation
 
