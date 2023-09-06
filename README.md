@@ -121,7 +121,7 @@ Install dependencies:
 ```
 python -m pip install --upgrade pip
 pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
-pip install --no-cache-dir numpy biopython fair-esm transformers[torch] sentencepiece
+pip install --no-cache-dir numpy biopython fair-esm transformers[torch]==4.31.0 sentencepiece
 ```
 
 Clone this repo:
