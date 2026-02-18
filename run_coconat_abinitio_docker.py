@@ -84,10 +84,12 @@ def main(argv):
          ])
 
   client = docker.from_env()
+  dr = docker.types.DeviceRequest(count=-1, capabilities=[['gpu']])
+  env = {}
   container = client.containers.run(
       image=FLAGS.docker_image_name,
       command=command_args,
-      device_requests=None,
+      device_requests=[dr],
       remove=True,
       detach=True,
       volumes = volume_cfg,
