@@ -16,4 +16,4 @@ PROT_T5_MODEL = "%s/prot_t5_xl_uniref50" % COCONAT_PLM_DIR
 
 ESM_MODEL = "%s/esm2/esm2_t33_650M_UR50D.pt" % COCONAT_PLM_DIR
 
-DEVICE = "cpu"
+DEVICE = "cuda:0"
