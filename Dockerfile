@@ -1,5 +1,5 @@
 # Base Image
-FROM python:3.8-slim-buster
+FROM nvidia/cuda:12.8.0-base-ubuntu24.04
 
 WORKDIR /app/coconat
 
