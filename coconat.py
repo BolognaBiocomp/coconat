@@ -118,6 +118,7 @@ def coconat_state(args):
     return 0
 
 def coconat_abinitio(args):
+    print("Number of CPUs:", os.cpu_count())
     work_env = workenv.TemporaryEnv(os.path.dirname(args.outfile).strip())
 
     sequences, seq_ids, lengths = [], [], []
