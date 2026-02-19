@@ -105,12 +105,16 @@ def main(argv):
              "HOME": "/tmp",
              "TORCHINDUCTOR_CACHE_DIR": "/tmp/torchinductor",
              "TORCH_HOME": "/tmp/torch"}
+  cpus = sorted(os.sched_getaffinity(0))
+  cpuset_str = ",".join(map(str, cpus))
+
   container = client.containers.run(
       image=FLAGS.docker_image_name,
       command=command_args,
       device_requests=[dr],
       remove=True,
       detach=True,
+      cpuset_cpus=cpuset_str,
       volumes = volume_cfg,
       user=FLAGS.docker_user,
       environment=env)
