@@ -84,11 +84,23 @@ def main(argv):
          ])
 
   client = docker.from_env()
-  dr = docker.types.DeviceRequest(count=-1, capabilities=[['gpu']])
-  env = {"XDG_CACHE_HOME": "/tmp/.cache",
-         "HOME": "/tmp",
-         "TORCHINDUCTOR_CACHE_DIR" :"/tmp/torchinductor",
-         "TORCH_HOME":"/tmp/torch"}
+  cvd = os.environ.get("CUDA_VISIBLE_DEVICES")
+  if cvd:
+      # Monta tutte, ma il runtime esporrà SOLO quelle in NVIDIA_VISIBLE_DEVICES
+      dr = docker.types.DeviceRequest(count=-1, capabilities=[['gpu']])
+      env = {"NVIDIA_VISIBLE_DEVICES": cvd,
+             "XDG_CACHE_HOME": "/tmp/.cache",
+             "HOME": "/tmp",
+             "TORCHINDUCTOR_CACHE_DIR": "/tmp/torchinductor",
+             "TORCH_HOME": "/tmp/torch"
+             }
+  else:
+      # fuori da SLURM (o CVD non impostata): prendi tutto
+      dr = docker.types.DeviceRequest(count=-1, capabilities=[['gpu']])
+      env = {"XDG_CACHE_HOME": "/tmp/.cache",
+             "HOME": "/tmp",
+             "TORCHINDUCTOR_CACHE_DIR": "/tmp/torchinductor",
+             "TORCH_HOME": "/tmp/torch"}
   container = client.containers.run(
       image=FLAGS.docker_image_name,
       command=command_args,
