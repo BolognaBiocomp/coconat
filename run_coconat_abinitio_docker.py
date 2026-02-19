@@ -95,7 +95,7 @@ def main(argv):
   if cvd:
       # Monta tutte, ma il runtime esporrà SOLO quelle in NVIDIA_VISIBLE_DEVICES
       dr = docker.types.DeviceRequest(count=-1, capabilities=[['gpu']])
-      env = {"NVIDIA_VISIBLE_DEVICES": cvd,
+      env = {"CUDA_VISIBLE_DEVICES": cvd,
              "XDG_CACHE_HOME": "/tmp/.cache",
              "HOME": "/tmp",
              "TORCHINDUCTOR_CACHE_DIR": "/tmp/torchinductor",
