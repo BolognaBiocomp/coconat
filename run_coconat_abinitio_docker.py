@@ -13,6 +13,8 @@ from docker import types
 flags.DEFINE_string('fasta_file', None, 'Path to FASTA file')
 flags.DEFINE_string('output_file', None, 'Output file prefix')
 flags.DEFINE_string('plm_dir', None, 'CoCoNat pLM dir')
+flags.DEFINE_integer('threads', 1, "Number of CPU threads to use")
+
 flags.DEFINE_string('docker_image_name', 'coconat:1.0',
     'Name of the CoCoNat Docker image.')
 flags.DEFINE_string('docker_user', f'{os.geteuid()}:{os.getegid()}',
@@ -80,7 +82,9 @@ def main(argv):
          '-f',
          f'{target_fasta_file}',
          '-o',
-         f'{target_out_file}'
+         f'{target_out_file}',
+         '-t',
+         f'{FLAGS.threads}',
          ])
 
   client = docker.from_env()
