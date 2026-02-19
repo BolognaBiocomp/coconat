@@ -6,6 +6,8 @@ import sys
 import re
 import numpy as np
 import torch
+import torch.serialization
+torch.serialization.add_safe_globals([argparse.Namespace])
 from Bio import SeqIO
 
 from coconat import coconatconfig as cfg
