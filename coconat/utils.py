@@ -103,7 +103,7 @@ def predict_register_probability_torch(samples, lengths, work_env):
         rof.close()
     return register_out_file
 
-def crf_refine(register_file, work_env):
+def crf_refine(register_file, work_env, threads):
     crf_stdout = work_env.createFile("crf.stdout.", ".log")
     crf_stderr = work_env.createFile("crf.stderr.", ".log")
     crf_output = work_env.createFile("crf.output.", ".tsv")
@@ -112,6 +112,7 @@ def crf_refine(register_file, work_env):
     subprocess.call([cfg.CRF_BIN, "-test",
                    "-m", cfg.COCONAT_CRF_MODEL, "-w", "7",
                    "-d", "posterior-viterbi-sum",
+                   "-a", str(threads),
                    "-o", crf_output,
                    "-q", crf_posterior_output_pfx, register_file],
                    stdout=open(crf_stdout, 'w'),

@@ -146,7 +146,7 @@ def coconat_abinitio(args):
     #samples = tf.keras.utils.pad_sequences(samples, padding="post", dtype="float32")
     register_file = utils.predict_register_probability_torch(samples, lengths, work_env)
     samples = samples.detach().cpu().numpy()
-    labels, probs = utils.crf_refine(register_file, work_env)
+    labels, probs = utils.crf_refine(register_file, work_env, args.threads)
     cc_segments = []
     oligo_preds = {}
     oligo_samples = []
@@ -207,6 +207,9 @@ def main():
     abinitparser.add_argument("-o", "--output",
                               help = "Output file name",
                               dest = "outfile", required = True)
+    abinitparser.add_argument("-t", "--threads",
+                              help = "Number of threads to use",
+                              type = int, default = 1)
     abinitparser.set_defaults(func=coconat_abinitio)
 
     oligostparser.add_argument("-f", "--fasta",
@@ -218,6 +221,8 @@ def main():
     oligostparser.add_argument("-o", "--output",
                                help = "Output file name",
                                dest = "outfile", required = True)
+    oligostparser.add_argument("-t", "--threads",
+                               type = int, default = 1)
     oligostparser.set_defaults(func=coconat_state)
 
     args = parser.parse_args()
