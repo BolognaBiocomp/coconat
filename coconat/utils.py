@@ -48,9 +48,12 @@ def embed_prot_t5(sequences):
     tokenizer = T5Tokenizer.from_pretrained(cfg.PROT_T5_MODEL)
     print("Done.", file=sys.stderr)
     seqs = [" ".join(list(re.sub(r"[UZOB]", "X", sequence))) for sequence in sequences]
-    ids = tokenizer.batch_encode_plus(seqs, add_special_tokens=True, padding="longest")
-    input_ids = torch.tensor(ids['input_ids']).to(device) #.to(device)
-    attention_mask = torch.tensor(ids['attention_mask']).to(device) #.to(device)
+    #ids = tokenizer.batch_encode_plus(seqs, add_special_tokens=True, padding="longest")
+    #input_ids = torch.tensor(ids['input_ids']).to(device) #.to(device)
+    enc = tokenizer(seqs, add_special_tokens=True, padding=True, return_tensors="pt")
+    input_ids = enc["input_ids"].to(device)
+    attention_mask = enc["attention_mask"].to(device)
+    #attention_mask = torch.tensor(ids['attention_mask']).to(device) #.to(device)
     with torch.no_grad():
         embedding_repr = model(input_ids=input_ids,attention_mask=attention_mask)
 
