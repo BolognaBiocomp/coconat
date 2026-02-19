@@ -107,6 +107,7 @@ def main(argv):
              "TORCH_HOME": "/tmp/torch"}
   cpus = sorted(os.sched_getaffinity(0))
   cpuset_str = ",".join(map(str, cpus))
+  print(cpuset_str)
 
   container = client.containers.run(
       image=FLAGS.docker_image_name,
