@@ -42,6 +42,7 @@ def join_chunks(chunk_ids, embeddings):
         prev = chunk_ids[i].split("_")[0]
     return ret
 
+"""
 def embed_prot_t5(sequences):
     device = torch.device(cfg.DEVICE)
     print("Loading pretrained ProtT5 model...", file=sys.stderr)
@@ -84,6 +85,88 @@ def embed_esm(sequences, seq_ids):
     ret = []
     for i, tokens_len in enumerate(batch_lens):
         ret.append(token_representations[i, 1 : tokens_len - 1].detach().cpu().numpy())
+    return ret
+"""
+def embed_prot_t5(sequences, batch_size=8):
+    """
+    Returns: list of np.ndarray, one per sequence, shape (L, D)
+    """
+    device = torch.device(cfg.DEVICE)
+
+    print("Loading pretrained ProtT5 model...", file=sys.stderr)
+    model = T5EncoderModel.from_pretrained(cfg.PROT_T5_MODEL).to(device)
+    tokenizer = T5Tokenizer.from_pretrained(cfg.PROT_T5_MODEL)
+    model.eval()
+    print("Done.", file=sys.stderr)
+
+    ret = []
+
+    for start in range(0, len(sequences), batch_size):
+        batch_sequences = sequences[start : start + batch_size]
+
+        # Replace uncommon AA + whitespace-separated tokens (ProtTrans convention)
+        batch_seqs_tok = [
+            " ".join(list(re.sub(r"[UZOB]", "X", seq))) for seq in batch_sequences
+        ]
+
+        enc = tokenizer(
+            batch_seqs_tok,
+            add_special_tokens=True,
+            padding=True,
+            return_tensors="pt",
+        )
+        input_ids = enc["input_ids"].to(device)
+        attention_mask = enc["attention_mask"].to(device)
+
+        # True lengths (non-pad tokens) per sequence
+        # ProtT5 adds an </s> at the end; we keep only residues (len(seq))
+        lengths = [len(seq) for seq in batch_sequences]
+
+        with torch.no_grad():
+            out = model(input_ids=input_ids, attention_mask=attention_mask)
+            hidden = out.last_hidden_state  # (B, T, D)
+
+        for i, L in enumerate(lengths):
+            emb = hidden[i, :L, :]  # residues only; drops trailing </s> and padding
+            ret.append(emb.detach().cpu().numpy())
+
+    return ret
+
+
+def embed_esm(sequences, seq_ids, batch_size=8, repr_layer=33):
+    """
+    Returns: list of np.ndarray, one per sequence, shape (L, D)
+    """
+    device = torch.device(cfg.DEVICE)
+
+    print("Loading pretrained ESM2 model...", file=sys.stderr)
+    model, alphabet = esm.pretrained.load_model_and_alphabet(cfg.ESM_MODEL)
+    model.eval()
+    model = model.to(device)
+    batch_converter = alphabet.get_batch_converter()
+    print("Done.", file=sys.stderr)
+
+    ret = []
+
+    for start in range(0, len(sequences), batch_size):
+        batch_sequences = sequences[start : start + batch_size]
+        batch_ids = seq_ids[start : start + batch_size]
+
+        data = list(zip(batch_ids, batch_sequences))
+        batch_labels, batch_strs, batch_tokens = batch_converter(data)
+
+        batch_tokens = batch_tokens.to(device)
+        batch_lens = (batch_tokens != alphabet.padding_idx).sum(1)  # includes CLS/EOS
+
+        with torch.no_grad():
+            results = model(batch_tokens, repr_layers=[repr_layer], return_contacts=False)
+            token_representations = results["representations"][repr_layer]  # (B,T,D)
+
+        for i, tokens_len in enumerate(batch_lens):
+            # remove CLS (pos 0) and EOS (pos tokens_len-1)
+            emb = token_representations[i, 1 : tokens_len - 1, :]
+            ret.append(emb.detach().cpu().numpy())
+
     return ret
 
 def predict_register_probability_torch(samples, lengths, work_env):

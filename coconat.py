@@ -29,8 +29,8 @@ def coconat_state(args):
 
     #print(chunks)
     #print(chunk_ids)
-    prot_t5_embeddings = utils.embed_prot_t5(chunks)
-    esm1b_embeddings = utils.embed_esm(chunks, chunk_ids)
+    prot_t5_embeddings = utils.embed_prot_t5(chunks, batch_size=args.batch_size)
+    esm1b_embeddings = utils.embed_esm(chunks, chunk_ids, batch_size=args.batch_size)
 
     prot_t5_embeddings = utils.join_chunks(chunk_ids, prot_t5_embeddings)
     esm1b_embeddings = utils.join_chunks(chunk_ids, esm1b_embeddings)
@@ -107,14 +107,6 @@ def coconat_state(args):
                 print(seq_ids[i], sequences[i][j], labels[i][j], oligo_preds[i][0][j], *[round(x,2) for x in probs], oligo_preds[i][1][j], sep="\t", file=outf)
         outf.close()
     work_env.destroy()
-    """
-    with open(args.outfile, 'w') as outf:
-        print("ID", "START", "END", "OligoST", "OligoProb", sep="\t", file=outf)
-        for k, s in enumerate(cc_segments):
-            print(seq_ids[s[0]], s[1]+1, s[2], oligo_states[k], oligo_probs[k], sep="\t", file=outf)
-        outf.close()
-    work_env.destroy()
-    """
     return 0
 
 def coconat_abinitio(args):
@@ -134,8 +126,8 @@ def coconat_abinitio(args):
 
     #print(chunks)
     #print(chunk_ids)
-    prot_t5_embeddings = utils.embed_prot_t5(chunks)
-    esm1b_embeddings = utils.embed_esm(chunks, chunk_ids)
+    prot_t5_embeddings = utils.embed_prot_t5(chunks, batch_size=args.batch_size)
+    esm1b_embeddings = utils.embed_esm(chunks, chunk_ids, batch_size=args.batch_size)
 
     prot_t5_embeddings = utils.join_chunks(chunk_ids, prot_t5_embeddings)
     esm1b_embeddings = utils.join_chunks(chunk_ids, esm1b_embeddings)
@@ -212,6 +204,8 @@ def main():
     abinitparser.add_argument("-t", "--threads",
                               help = "Number of threads to use",
                               type = int, default = 1)
+    abinitparser.add_argument("-b", "--batch_size",
+                              help = "Batch size", default = 8)
     abinitparser.set_defaults(func=coconat_abinitio)
 
     oligostparser.add_argument("-f", "--fasta",
@@ -225,6 +219,8 @@ def main():
                                dest = "outfile", required = True)
     oligostparser.add_argument("-t", "--threads",
                                type = int, default = 1)
+    abinitparser.add_argument("-b", "--batch_size",
+                              help="Batch size", default=8)
     oligostparser.set_defaults(func=coconat_state)
 
     args = parser.parse_args()
