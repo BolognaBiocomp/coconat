@@ -205,7 +205,7 @@ def main():
                               help = "Number of threads to use",
                               type = int, default = 1)
     abinitparser.add_argument("-b", "--batch_size",
-                              help = "Batch size", default = 8)
+                              help = "Batch size", type=int, default = 8)
     abinitparser.set_defaults(func=coconat_abinitio)
 
     oligostparser.add_argument("-f", "--fasta",
@@ -220,7 +220,7 @@ def main():
     oligostparser.add_argument("-t", "--threads",
                                type = int, default = 1)
     oligostparser.add_argument("-b", "--batch_size",
-                              help="Batch size", default=8)
+                              help="Batch size", type=int, default=8)
     oligostparser.set_defaults(func=coconat_state)
 
     args = parser.parse_args()
