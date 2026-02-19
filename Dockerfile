@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates curl git build-essential && \
     rm -rf /var/lib/apt/lists/* && \
     pip install torch torchvision transformers && \
-    pip install --no-cache-dir numpy biopython fair-esm sentencepiece && \
+    pip install --no-cache-dir numpy biopython fair-esm sentencepiece protobuf tiktoken && \
     apt-get -y update && \
     apt-get -y install vim
 
