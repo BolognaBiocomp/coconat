@@ -85,7 +85,10 @@ def main(argv):
 
   client = docker.from_env()
   dr = docker.types.DeviceRequest(count=-1, capabilities=[['gpu']])
-  env = {}
+  env = {"XDG_CACHE_HOME": "/tmp/.cache",
+         "HOME": "/tmp",
+         "TORCHINDUCTOR_CACHE_DIR" :"/tmp/torchinductor",
+         "TORCH_HOME":"/tmp/torch"}
   container = client.containers.run(
       image=FLAGS.docker_image_name,
       command=command_args,
@@ -94,9 +97,7 @@ def main(argv):
       detach=True,
       volumes = volume_cfg,
       user=FLAGS.docker_user,
-      environment={
-
-      })
+      environment=env)
   # Add signal handler to ensure CTRL+C also stops the running container.
   signal.signal(signal.SIGINT,
                 lambda unused_sig, unused_frame: container.kill())
