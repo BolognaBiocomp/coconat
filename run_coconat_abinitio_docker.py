@@ -14,6 +14,7 @@ flags.DEFINE_string('fasta_file', None, 'Path to FASTA file')
 flags.DEFINE_string('output_file', None, 'Output file prefix')
 flags.DEFINE_string('plm_dir', None, 'CoCoNat pLM dir')
 flags.DEFINE_integer('threads', 1, "Number of CPU threads to use")
+flags.DEFINE_integer('batch_size', 8, "Batch size")
 
 flags.DEFINE_string('docker_image_name', 'coconat:1.0',
     'Name of the CoCoNat Docker image.')
@@ -85,6 +86,8 @@ def main(argv):
          f'{target_out_file}',
          '-t',
          f'{FLAGS.threads}',
+         '-b',
+         f'{FLAGS.batch_size}'
          ])
 
   client = docker.from_env()
