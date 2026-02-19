@@ -88,6 +88,9 @@ def main(argv):
          ])
 
   client = docker.from_env()
+  cpus = sorted(os.sched_getaffinity(0))
+  cpuset_str = ",".join(map(str, cpus))
+  #print(cpuset_str)
   cvd = os.environ.get("CUDA_VISIBLE_DEVICES")
   if cvd:
       # Monta tutte, ma il runtime esporrà SOLO quelle in NVIDIA_VISIBLE_DEVICES
@@ -96,7 +99,12 @@ def main(argv):
              "XDG_CACHE_HOME": "/tmp/.cache",
              "HOME": "/tmp",
              "TORCHINDUCTOR_CACHE_DIR": "/tmp/torchinductor",
-             "TORCH_HOME": "/tmp/torch"
+             "TORCH_HOME": "/tmp/torch",
+             "OMP_NUM_THREADS": str(cpus),
+             "MKL_NUM_THREADS": str(cpus),
+             "OPENBLAS_NUM_THREADS": str(cpus),
+             "NUMEXPR_NUM_THREADS": str(cpus),
+             "BLIS_NUM_THREADS": str(cpus),
              }
   else:
       # fuori da SLURM (o CVD non impostata): prendi tutto
@@ -104,10 +112,14 @@ def main(argv):
       env = {"XDG_CACHE_HOME": "/tmp/.cache",
              "HOME": "/tmp",
              "TORCHINDUCTOR_CACHE_DIR": "/tmp/torchinductor",
-             "TORCH_HOME": "/tmp/torch"}
-  cpus = sorted(os.sched_getaffinity(0))
-  cpuset_str = ",".join(map(str, cpus))
-  print(cpuset_str)
+             "TORCH_HOME": "/tmp/torch",
+             "OMP_NUM_THREADS": str(cpus),
+             "MKL_NUM_THREADS": str(cpus),
+             "OPENBLAS_NUM_THREADS": str(cpus),
+             "NUMEXPR_NUM_THREADS": str(cpus),
+             "BLIS_NUM_THREADS": str(cpus),
+             }
+
 
   container = client.containers.run(
       image=FLAGS.docker_image_name,
