@@ -219,7 +219,7 @@ def main():
                                dest = "outfile", required = True)
     oligostparser.add_argument("-t", "--threads",
                                type = int, default = 1)
-    abinitparser.add_argument("-b", "--batch_size",
+    oligostparser.add_argument("-b", "--batch_size",
                               help="Batch size", default=8)
     oligostparser.set_defaults(func=coconat_state)
 
