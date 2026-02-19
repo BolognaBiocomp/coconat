@@ -71,12 +71,13 @@ def embed_esm(sequences, seq_ids):
     model, alphabet = esm.pretrained.load_model_and_alphabet(cfg.ESM_MODEL)
     #model.to(device)
     print("Done", file=sys.stderr)
-    model.eval().to(device)
+    model.eval()
+    model = model.to(device)
     batch_converter = alphabet.get_batch_converter()
     data = list(zip(seq_ids, sequences))
     batch_labels, batch_strs, batch_tokens = batch_converter(data)
     batch_lens = (batch_tokens != alphabet.padding_idx).sum(1)
-    batch_tokens.to(device)
+    batch_tokens = batch_tokens.to(device)
     with torch.no_grad():
         results = model(batch_tokens, repr_layers=[33], return_contacts=False)
     token_representations = results["representations"][33]
