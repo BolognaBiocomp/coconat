@@ -116,11 +116,12 @@ def main(argv):
              "HOME": "/tmp",
              "TORCHINDUCTOR_CACHE_DIR": "/tmp/torchinductor",
              "TORCH_HOME": "/tmp/torch",
-             "OMP_NUM_THREADS": str(cpus),
-             "MKL_NUM_THREADS": str(cpus),
-             "OPENBLAS_NUM_THREADS": str(cpus),
-             "NUMEXPR_NUM_THREADS": str(cpus),
-             "BLIS_NUM_THREADS": str(cpus),
+             "OMP_NUM_THREADS": str(len(cpus)),
+             "MKL_NUM_THREADS": str(len(cpus)),
+             "OPENBLAS_NUM_THREADS": str(len(cpus)),
+             "NUMEXPR_NUM_THREADS": str(len(cpus)),
+             "BLIS_NUM_THREADS": str(len(cpus))
+
              }
 
 
