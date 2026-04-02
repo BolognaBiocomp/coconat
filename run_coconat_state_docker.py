@@ -14,7 +14,7 @@ flags.DEFINE_string('fasta_file', None, 'Path to FASTA file')
 flags.DEFINE_string('seg_file', None, 'Path to CC segment file')
 flags.DEFINE_string('output_file', None, 'Output file prefix')
 flags.DEFINE_string('plm_dir', None, 'CoCoNat pLM dir')
-flags.DEFINE_string('docker_image_name', 'coconat:1.0',
+flags.DEFINE_string('docker_image_name', 'docker.beverara.biocomp.unibo.it:5000/coconat:1.0',
     'Name of the CoCoNat Docker image.')
 flags.DEFINE_string('docker_user', f'{os.geteuid()}:{os.getegid()}',
     'UID:GID with which to run the Docker container.')
